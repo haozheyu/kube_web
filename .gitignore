@@ -14,6 +14,7 @@ lastupdate.tmp
 /conf/app.conf
 *.exe~
 *.exe
+/src/backend/backend
 # dependencies
 /src/frontend/node_modules
 /src/frontend/.idea
