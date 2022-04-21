@@ -1,6 +1,6 @@
 {
-  "name": "luban_fe",
-  "version": "0.1.0",
+  "name": "kube_web",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve --mode dev",

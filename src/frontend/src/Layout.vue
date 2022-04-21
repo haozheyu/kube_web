@@ -3,24 +3,6 @@
     <a-layout-sider :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }">
       <div class="logo" >{{ title }}</div>
       <a-menu theme="dark" mode="inline" :selectedKeys="[$route.path]">
-        <a-menu-item key="/">
-          <router-link :to="{path: '/'}">
-          <IconFont type="pigs-icon-ziyuan"/>
-            <span class="nav-text">仪表盘</span>
-          </router-link>
-        </a-menu-item>
-
-        <a-sub-menu key="2">
-          <template #icon>
-            <IconFont type="pigs-icon-fuwuqi1"/>
-          </template>
-          <template #title>资产管理</template>
-          <a-menu-item key="/cmdb/server">
-            <router-link :to="{path: '/cmdb/server'}">
-              服务器
-            </router-link>
-          </a-menu-item>
-        </a-sub-menu>
 
         <a-sub-menu key="3">
           <template #icon>
@@ -29,7 +11,7 @@
           <template #title>容器管理</template>
 
           <a-menu-item key="/k8s/cluster">
-            <router-link :to="{path: '/k8s/cluster'}">
+            <router-link :to="{path: '/'}">
               集群管理
             </router-link>
           </a-menu-item>

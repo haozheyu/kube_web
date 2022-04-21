@@ -11,24 +11,6 @@ const routes = [
         children: [
             {
                 path: '',
-                name: 'Index',
-                component: () => import('../views/Index.vue'),
-                meta: {
-                    title: '仪表盘',
-                }
-            },
-            {
-                path: 'cmdb/server',
-                name: 'Server',
-                component: () => import('../views/cmdb/Index.vue'),
-                meta: {
-                    title: '服务器',
-                    module: '资产管理'
-                },
-                children: []
-            },
-            {
-                path: 'k8s/cluster',
                 name: 'ClusterManage',
                 component: () => import('../views/container/K8SClusterManage.vue'),
                 meta: {
@@ -259,16 +241,16 @@ const routes = [
             },
         ]
     },
-    {
-        path: '/ssh',
-        name: 'WebSSH',
-        component: () => import('../views/cmdb/Console.vue'),
-        meta: {
-            title: '远程终端',
-            module: '资产管理'
-        },
-        children: []
-    },
+    // {
+    //     path: '/ssh',
+    //     name: 'WebSSH',
+    //     component: () => import('../views/cmdb/Console.vue'),
+    //     meta: {
+    //         title: '远程终端',
+    //         module: '资产管理'
+    //     },
+    //     children: []
+    // },
     {
         path: '/user/login',
         name: 'Login',
