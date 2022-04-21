@@ -1,0 +1,45 @@
+0001/01/01 00:00:00.000  [M] [server.go:3137]  [HTTP] http: superfluous response.WriteHeader call from github.com/beego/beego/v2/server/web/context.(*Response).WriteHeader (context.go:230)
+2022/04/12 21:38:39.063  [I] [parser.go:112]  generate router from comments
+2022/04/12 21:38:39.063  [I] [asm_amd64.s:1371]  http server Running on http://:8998
+2022/04/12 21:38:46.950  [C] [panic.go:965]  the request url is  /api/cluster/get_list
+2022/04/12 21:38:46.950  [C] [panic.go:965]  Handler crashed with error <RawSeter.QueryRows> all args must be use ptr slice
+2022/04/12 21:38:46.950  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/runtime/panic.go:965
+2022/04/12 21:38:46.950  [C] [panic.go:965]  C:/Users/郝人的实验机/go/pkg/mod/github.com/beego/beego/v2@v2.0.1/client/orm/orm_raw.go:455
+2022/04/12 21:38:46.950  [C] [panic.go:965]  C:/Users/郝人的实验机/Desktop/project/kube_web/models/k8s-cluster.go:71
+2022/04/12 21:38:46.950  [C] [panic.go:965]  C:/Users/郝人的实验机/Desktop/project/kube_web/controllers/resource/cluster.go:40
+2022/04/12 21:38:46.950  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/reflect/value.go:476
+2022/04/12 21:38:46.950  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/reflect/value.go:337
+2022/04/12 21:38:46.950  [C] [panic.go:965]  C:/Users/郝人的实验机/go/pkg/mod/github.com/beego/beego/v2@v2.0.1/server/web/router.go:883
+2022/04/12 21:38:46.951  [C] [panic.go:965]  C:/Users/郝人的实验机/go/pkg/mod/github.com/beego/beego/v2@v2.0.1/server/web/filter.go:81
+2022/04/12 21:38:46.951  [C] [panic.go:965]  C:/Users/郝人的实验机/go/pkg/mod/github.com/beego/beego/v2@v2.0.1/server/web/router.go:664
+2022/04/12 21:38:46.951  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/net/http/server.go:2887
+2022/04/12 21:38:46.951  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/net/http/server.go:1952
+2022/04/12 21:38:46.951  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/runtime/asm_amd64.s:1371
+0001/01/01 00:00:00.000  [M] [server.go:3137]  [HTTP] http: superfluous response.WriteHeader call from github.com/beego/beego/v2/server/web/context.(*Response).WriteHeader (context.go:230)
+2022/04/12 21:45:50.027  [I] [parser.go:112]  generate router from comments
+2022/04/12 21:45:50.028  [I] [asm_amd64.s:1371]  http server Running on http://:8998
+2022/04/12 21:45:57.657  [I] [parser.go:112]  generate router from comments
+2022/04/12 21:45:57.657  [I] [asm_amd64.s:1371]  http server Running on http://:8998
+2022/04/12 21:46:43.439  [I] [parser.go:112]  generate router from comments
+2022/04/12 21:46:43.440  [I] [asm_amd64.s:1371]  http server Running on http://:8998
+2022/04/12 21:46:51.294  [I] [parser.go:112]  generate router from comments
+2022/04/12 21:46:51.296  [I] [asm_amd64.s:1371]  http server Running on http://:8998
+2022/04/12 21:46:53.205  [I] [k8s-cluster.go:73]  获取添加集群信息列表 1 1
+2022/04/12 21:48:12.945  [I] [parser.go:112]  generate router from comments
+2022/04/12 21:48:12.945  [I] [asm_amd64.s:1371]  http server Running on http://:8998
+2022/04/12 21:55:52.556  [I] [k8s-cluster.go:73]  获取添加集群信息列表 104 11
+2022/04/12 21:56:41.279  [I] [k8s-cluster.go:73]  获取添加集群信息列表 129 13
+2022/04/12 21:56:46.023  [I] [k8s-cluster.go:73]  获取添加集群信息列表 129 13
+2022/04/12 21:57:27.600  [I] [k8s-cluster.go:73]  获取添加集群信息列表 129 13
+2022/04/12 22:26:12.098  [I] [k8s-cluster.go:73]  获取添加集群信息列表 129 13
+2022/04/12 22:26:17.272  [I] [k8s-cluster.go:73]  获取添加集群信息列表 129 13
+2022/04/12 22:27:26.165  [I] [parser.go:112]  generate router from comments
+2022/04/12 22:27:26.166  [I] [asm_amd64.s:1371]  http server Running on http://:8998
+2022/04/12 22:27:48.668  [I] [k8s-cluster.go:73]  获取添加集群信息列表 129 13
+2022/04/12 22:27:54.678  [I] [parser.go:112]  generate router from comments
+2022/04/12 22:27:54.678  [I] [asm_amd64.s:1371]  http server Running on http://:8998
+2022/04/12 22:27:55.949  [I] [k8s-cluster.go:73]  获取添加集群信息列表 129 13
+2022/04/15 11:17:31.259  [I] [parser.go:112]  generate router from comments
+2022/04/15 11:17:31.262  [I] [asm_amd64.s:1581]  http server Running on http://:8998
+2022/04/18 18:25:26.099  [I] [parser.go:112]  generate router from comments
+2022/04/18 18:25:26.101  [I] [asm_amd64.s:1581]  http server Running on http://:8998

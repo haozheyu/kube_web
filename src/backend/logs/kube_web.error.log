@@ -1,0 +1,16 @@
+2021/06/13 21:21:15.092  [E] [log.go:306]  Authorization is nil
+2021/06/13 21:30:55.611  [E] [log.go:306]  signature is invalid
+2021/06/13 21:31:22.190  [E] [log.go:306]  signature is invalid
+2021/06/13 21:36:24.184  [E] [log.go:306]  signature is invalid
+2021/06/13 22:17:01.621  [E] [log.go:306]  signature is invalid
+2021/06/13 22:19:21.619  [E] [log.go:306]  signature is invalid
+2022/04/12 16:56:45.964  [E] [log.go:306]  KubeConfig内容错误 invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable
+2022/04/12 16:57:59.771  [E] [log.go:720]  KubeConfig内容错误 invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable
+2022/04/12 17:00:02.707  [E] [log.go:720]  KubeConfig内容错误 invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable
+2022/04/12 17:16:36.852  [E] [container.go:19]  KubeConfig内容错误 invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable
+2022/04/12 17:18:13.423  [E] [log.go:306]  KubeConfig内容错误 invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable
+2022/04/12 17:40:36.242  [E] [container.go:19]  KubeConfig内容错误 invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable
+2022/04/12 17:42:31.536  [E] [container.go:19]  KubeConfig内容错误 invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable
+2022/04/12 17:43:40.247  [E] [container.go:19]  KubeConfig内容错误 invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable
+2022/04/12 17:49:51.590  [E] [container.go:19]  KubeConfig内容错误 invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable
+2022/04/12 17:50:00.831  [E] [container.go:19]  KubeConfig内容错误 invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable

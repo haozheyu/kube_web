@@ -1,0 +1,42 @@
+2022/04/12 18:06:02.811  [C] [panic.go:1038]  the request url is  /api/cluster/get_list
+2022/04/12 18:06:02.811  [C] [panic.go:1038]  Handler crashed with error <RawSeter.QueryRows> all args must be use ptr slice
+2022/04/12 18:06:02.811  [C] [panic.go:1038]  C:/Program Files/Go/src/runtime/panic.go:1038
+2022/04/12 18:06:02.811  [C] [panic.go:1038]  C:/Users/hzy/go/pkg/mod/github.com/beego/beego/v2@v2.0.1/client/orm/orm_raw.go:455
+2022/04/12 18:06:02.811  [C] [panic.go:1038]  C:/Users/hzy/Desktop/kube_web/models/k8s-cluster.go:71
+2022/04/12 18:06:02.811  [C] [panic.go:1038]  C:/Users/hzy/Desktop/kube_web/controllers/resource/cluster/create.go:43
+2022/04/12 18:06:02.811  [C] [panic.go:1038]  C:/Program Files/Go/src/reflect/value.go:543
+2022/04/12 18:06:02.811  [C] [panic.go:1038]  C:/Program Files/Go/src/reflect/value.go:339
+2022/04/12 18:06:02.811  [C] [panic.go:1038]  C:/Users/hzy/go/pkg/mod/github.com/beego/beego/v2@v2.0.1/server/web/router.go:883
+2022/04/12 18:06:02.811  [C] [panic.go:1038]  C:/Users/hzy/go/pkg/mod/github.com/beego/beego/v2@v2.0.1/server/web/filter.go:81
+2022/04/12 18:06:02.811  [C] [panic.go:1038]  C:/Users/hzy/go/pkg/mod/github.com/beego/beego/v2@v2.0.1/server/web/router.go:664
+2022/04/12 18:06:02.811  [C] [panic.go:1038]  C:/Program Files/Go/src/net/http/server.go:2878
+2022/04/12 18:06:02.811  [C] [panic.go:1038]  C:/Program Files/Go/src/net/http/server.go:1929
+2022/04/12 18:06:02.811  [C] [panic.go:1038]  C:/Program Files/Go/src/runtime/asm_amd64.s:1581
+2022/04/12 21:37:21.792  [C] [panic.go:965]  the request url is  /api/cluster/get_list
+2022/04/12 21:37:21.792  [C] [panic.go:965]  Handler crashed with error <RawSeter.QueryRows> all args must be use ptr slice
+2022/04/12 21:37:21.792  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/runtime/panic.go:965
+2022/04/12 21:37:21.792  [C] [panic.go:965]  C:/Users/郝人的实验机/go/pkg/mod/github.com/beego/beego/v2@v2.0.1/client/orm/orm_raw.go:455
+2022/04/12 21:37:21.792  [C] [panic.go:965]  C:/Users/郝人的实验机/Desktop/project/kube_web/models/k8s-cluster.go:71
+2022/04/12 21:37:21.792  [C] [panic.go:965]  C:/Users/郝人的实验机/Desktop/project/kube_web/controllers/resource/cluster.go:40
+2022/04/12 21:37:21.792  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/reflect/value.go:476
+2022/04/12 21:37:21.792  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/reflect/value.go:337
+2022/04/12 21:37:21.792  [C] [panic.go:965]  C:/Users/郝人的实验机/go/pkg/mod/github.com/beego/beego/v2@v2.0.1/server/web/router.go:883
+2022/04/12 21:37:21.792  [C] [panic.go:965]  C:/Users/郝人的实验机/go/pkg/mod/github.com/beego/beego/v2@v2.0.1/server/web/filter.go:81
+2022/04/12 21:37:21.792  [C] [panic.go:965]  C:/Users/郝人的实验机/go/pkg/mod/github.com/beego/beego/v2@v2.0.1/server/web/router.go:664
+2022/04/12 21:37:21.792  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/net/http/server.go:2887
+2022/04/12 21:37:21.792  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/net/http/server.go:1952
+2022/04/12 21:37:21.792  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/runtime/asm_amd64.s:1371
+2022/04/12 21:38:46.950  [C] [panic.go:965]  the request url is  /api/cluster/get_list
+2022/04/12 21:38:46.950  [C] [panic.go:965]  Handler crashed with error <RawSeter.QueryRows> all args must be use ptr slice
+2022/04/12 21:38:46.950  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/runtime/panic.go:965
+2022/04/12 21:38:46.950  [C] [panic.go:965]  C:/Users/郝人的实验机/go/pkg/mod/github.com/beego/beego/v2@v2.0.1/client/orm/orm_raw.go:455
+2022/04/12 21:38:46.950  [C] [panic.go:965]  C:/Users/郝人的实验机/Desktop/project/kube_web/models/k8s-cluster.go:71
+2022/04/12 21:38:46.950  [C] [panic.go:965]  C:/Users/郝人的实验机/Desktop/project/kube_web/controllers/resource/cluster.go:40
+2022/04/12 21:38:46.950  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/reflect/value.go:476
+2022/04/12 21:38:46.950  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/reflect/value.go:337
+2022/04/12 21:38:46.950  [C] [panic.go:965]  C:/Users/郝人的实验机/go/pkg/mod/github.com/beego/beego/v2@v2.0.1/server/web/router.go:883
+2022/04/12 21:38:46.951  [C] [panic.go:965]  C:/Users/郝人的实验机/go/pkg/mod/github.com/beego/beego/v2@v2.0.1/server/web/filter.go:81
+2022/04/12 21:38:46.951  [C] [panic.go:965]  C:/Users/郝人的实验机/go/pkg/mod/github.com/beego/beego/v2@v2.0.1/server/web/router.go:664
+2022/04/12 21:38:46.951  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/net/http/server.go:2887
+2022/04/12 21:38:46.951  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/net/http/server.go:1952
+2022/04/12 21:38:46.951  [C] [panic.go:965]  C:/Users/郝人的实验机/go/go1.16.3/src/runtime/asm_amd64.s:1371
