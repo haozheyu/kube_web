@@ -44,7 +44,6 @@ func (c *KubeConfigMapController) Create() {
 		logs.Error("Invalid configMap tpl %v", string(c.Ctx.Input.RequestBody))
 		c.AbortBadRequestFormat("KubeConfigMap")
 	}
-
 	cluster := c.Ctx.Input.Param(":cluster")
 	cli := c.Client(cluster)
 

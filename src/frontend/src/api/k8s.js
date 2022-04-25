@@ -1,7 +1,9 @@
 import {post, get, del} from "@/plugin/utils/request";
 
-export const k8sCluster = (params) => post('/api/v1/k8s/cluster', params)
-export const fetchK8SCluster = (params) => get('/api/v1/clusters', params)
+export const k8sCluster = (params) => post('/api/v1/clusters', params)  //create cluster
+export const fetchK8SCluster = (params) => get('/api/v1/clusters', params)  // get cluster list
+
+
 export const clusterSecret = (params) => get('/api/v1/k8s/cluster/secret', params)
 export const delK8SCluster = (params) => post('/api/v1/k8s/cluster/delete', params)
 export const getK8SClusterDetail = (params) => get('/api/v1/k8s/cluster/detail', params)

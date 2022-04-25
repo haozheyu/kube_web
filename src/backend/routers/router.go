@@ -73,6 +73,8 @@ func init() {
 
 	beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{
 		// 可选参数"GET", "POST", "PUT", "DELETE", "OPTIONS" (*为所有)
+		//允许访问所有源
+		AllowAllOrigins: true,
 		// 其中Options跨域复杂请求预检
 		AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		// 指的是允许的Header的种类

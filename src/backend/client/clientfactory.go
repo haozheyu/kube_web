@@ -5,7 +5,7 @@ import (
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
-	extensionsv1beta1 "k8s.io/api/networking/v1"
+	extensionsv1beta1 "k8s.io/api/extensions/v1beta1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	storagev1 "k8s.io/api/storage/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -18,7 +18,7 @@ func (h *resourceHandler) getClientByGroupVersion(groupVersion schema.GroupVersi
 	case corev1.GroupName:
 		return h.client.CoreV1().RESTClient()
 	case appsv1beta1.GroupName:
-		if groupVersion.Version == "v1" {
+		if groupVersion.Version == "v1"{
 			return h.client.AppsV1().RESTClient()
 		}
 		return h.client.AppsV1beta1().RESTClient()

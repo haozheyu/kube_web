@@ -1,8 +1,10 @@
 package cluster
 
 import (
+	"context"
 	"encoding/json"
-
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	kubeclient "kube_web/client"
 	"kube_web/controllers/base"
 	"kube_web/models"
 	"kube_web/util/logs"
@@ -67,16 +69,37 @@ func (c *ClusterController) GetNames() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *ClusterController) Create() {
-	var cluster models.Cluster
-	err := json.Unmarshal(c.Ctx.Input.RequestBody, &cluster)
-	if err != nil {
-		logs.Error("get body error. %v", err)
-		c.AbortBadRequestFormat("Cluster")
+	var (
+		cluster models.Cluster
+		reqForm struct {
+			Name       string `form:"name" json:"name"`
+			KubeConfig string `form:"kubeConfig" json:"kubeConfig"`
+		}
+	)
+	if err := c.Ctx.BindJSON(&reqForm); err != nil {
+		err = c.Ctx.BindForm(&reqForm)
+		if err != nil {
+			logs.Error("bind form error.%v", err.Error())
+			c.HandleError(err)
+			return
+		}
 	}
-	cluster.User = c.User.Name
+	//解析yaml获取集群版本
+	clientSet, config, err := kubeclient.KubeClient("", reqForm.KubeConfig)
+	if err != nil {
+		logs.Error("kubeConfig 解析 error.%v", err.Error())
+		c.HandleError(err)
+		return
+	}
+
+	list, _ := clientSet.CoreV1().Nodes().List(context.TODO(), v1.ListOptions{})
+	cluster.Version = list.Items[0].Status.NodeInfo.KubeletVersion
+	cluster.Name = reqForm.Name
+	cluster.Master = config.Host
+	cluster.DisplayName = reqForm.Name
+	cluster.KubeConfig = reqForm.KubeConfig
 
 	objectid, err := models.ClusterModel.Add(&cluster)
-
 	if err != nil {
 		logs.Error("create error.%v", err.Error())
 		c.HandleError(err)

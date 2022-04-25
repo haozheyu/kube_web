@@ -3,7 +3,9 @@ package ingress
 import (
 	"encoding/json"
 	"fmt"
-	kapiv1 "k8s.io/api/extensions/v1beta1"
+
+	kapiv1beta1 "k8s.io/api/extensions/v1beta1"
+
 	"kube_web/controllers/base"
 	"kube_web/models"
 	"kube_web/util/hack"
@@ -109,7 +111,7 @@ func (c *IngressTplController) Create() {
 }
 
 func validIngressTemplate(ingrTplStr string) error {
-	ingr := kapiv1.Ingress{}
+	ingr := kapiv1beta1.Ingress{}
 	err := json.Unmarshal(hack.Slice(ingrTplStr), &ingr)
 	if err != nil {
 		return fmt.Errorf("ingress template format error.%v", err.Error())

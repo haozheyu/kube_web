@@ -156,6 +156,42 @@ func Cluster(cluster string) (*models.Cluster, error) {
 	return manager.Cluster, nil
 }
 
+func KubeClient(master, kubeconfig string) (*kubernetes.Clientset, *rest.Config, error) {
+	configV1 := clientcmdapiv1.Config{}
+	err := yaml.Unmarshal([]byte(kubeconfig), &configV1)
+	if err != nil {
+		logs.Error("json unmarshal kubeconfig error. %v ", err)
+		return nil, nil, err
+	}
+	logs.Info(configV1.Clusters[0].Cluster.Server, "-------------------")
+
+	configObject, err := clientcmdlatest.Scheme.ConvertToVersion(&configV1, clientcmdapi.SchemeGroupVersion)
+	configInternal := configObject.(*clientcmdapi.Config)
+	if master == "" {
+		master = configV1.Clusters[0].Cluster.Server
+	}
+	clientConfig, err := clientcmd.NewDefaultClientConfig(*configInternal, &clientcmd.ConfigOverrides{
+		ClusterDefaults: clientcmdapi.Cluster{Server: master},
+	}).ClientConfig()
+
+	if err != nil {
+		logs.Error("build client config error. %v ", err)
+		return nil, nil, err
+	}
+
+	clientConfig.QPS = defaultQPS
+	clientConfig.Burst = defaultBurst
+
+	clientSet, err := kubernetes.NewForConfig(clientConfig)
+
+	if err != nil {
+		logs.Error("(%s) kubernetes.NewForConfig(%v) error.%v", master, err, clientConfig)
+		return nil, nil, err
+	}
+
+	return clientSet, clientConfig, nil
+}
+
 func Client(cluster string) (*kubernetes.Clientset, error) {
 	manager, err := Manager(cluster)
 	if err != nil {
@@ -188,7 +224,6 @@ func Managers() *sync.Map {
 func buildClient(master string, kubeconfig string) (*kubernetes.Clientset, *rest.Config, error) {
 	configV1 := clientcmdapiv1.Config{}
 	err := yaml.Unmarshal([]byte(kubeconfig), &configV1)
-	//err := json.Unmarshal([]byte(kubeconfig), &configV1)
 	if err != nil {
 		logs.Error("json unmarshal kubeconfig error. %v ", err)
 		return nil, nil, err

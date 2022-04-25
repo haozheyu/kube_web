@@ -3,7 +3,7 @@ package crd
 import (
 	"context"
 	"encoding/json"
-	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
+	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"kube_web/controllers/base"
@@ -83,7 +83,7 @@ func (c *KubeCRDController) Create() {
 	}
 	cluster := c.Ctx.Input.Param(":cluster")
 	cli := c.ApiextensionsClient(cluster)
-	result, err := cli.ApiextensionsV1().CustomResourceDefinitions().Create(context.TODO(), &tpl, metaV1.CreateOptions{})
+	result, err := cli.ApiextensionsV1beta1().CustomResourceDefinitions().Create(context.TODO(), &tpl, metaV1.CreateOptions{})
 	if err != nil {
 		logs.Error("create CRD (%v) by cluster (%s) error.%v", tpl, cluster, err)
 		c.HandleError(err)
@@ -108,7 +108,7 @@ func (c *KubeCRDController) Update() {
 	}
 
 	cli := c.ApiextensionsClient(cluster)
-	result, err := cli.ApiextensionsV1().CustomResourceDefinitions().Update(context.TODO(),
+	result, err := cli.ApiextensionsV1beta1().CustomResourceDefinitions().Update(context.TODO(),
 		&tpl,
 		metaV1.UpdateOptions{},
 	)

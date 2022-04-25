@@ -16,37 +16,41 @@
         rowKey="id"
         :locale="{emptyText: '暂无数据'}"
     >
-
-      <template #ClusterVersion="{ text }">
+      <template #name="{ text }">
         <span>
-          <IconFont type="luban-icon-logo"/> &nbsp;{{ text }}
+          {{ text }}
         </span>
       </template>
-
-      <template #nodeNumber="{ text }">
+      <template #ClusterVersion="{ text }">
         <span>
           <a-tag color="cyan">{{ text }}</a-tag>
         </span>
       </template>
 
-      <template #kubeConfig="{ text, id }">
-        <a-tooltip placement="topLeft" title="查看凭证">
-          <a @click="ViewClusterConfig(id, text.id)"><IconFont type="pigs-icon-pingzheng"/></a>
+      <template #managerNode="{ text }">
+        <span>
+          <a-tag color="orange">{{ text }}</a-tag>
+        </span>
+      </template>
+
+      <template #kubeConfig="{ text }">
+        <a-tooltip placement="topLeft" title="查看凭证" color="orange">
+          <a @click="ViewClusterConfig( text )"><IconFont type="pigs-icon-pingzheng"/></a>
         </a-tooltip>
       </template>
 
-      <template #action="{text, id }">
+      <template #action="{text }">
         <span>
-          <a @click="clusterDetail(id, text.id)">查看</a>
+          <a @click="clusterDetail(text)">查看</a>
         </span>
       </template>
 
     </a-table>
+
     <a-modal v-model:visible="state.ClusterConfigVisible" title="查看集群凭证" :footer="null" :keyboard="false" :maskClosable="false">
 
-      <a-textarea v-model:value="state.ClusterConfig" placeholder="请粘贴KubeConfig内容" style="width: 100%; height: 600px"/>
+      <a-textarea v-model:value="state.ClusterConfig" placeholder="KubeConfig内容" style="width: 100%; height: 600px"/>
     </a-modal>
-
 
     <a-modal v-model:visible="createK8SClusterVisible" title="添加新集群" @ok="onSubmit" @cancel="resetForm" cancelText="取消"
              okText="确定" :keyboard="false" :maskClosable="false">
@@ -57,19 +61,11 @@
           :label-col="labelCol"
           :wrapper-col="wrapperCol"
       >
-        <a-form-item ref="k8sClusterName" label="集群名称" name="k8sClusterName">
-          <a-input v-model:value="formState.k8sClusterName" placeholder="请输入集群名称"/>
+        <a-form-item ref="name" label="集群名称" name="name">
+          <a-input v-model:value="formState.name" placeholder="请输入集群名称"/>
         </a-form-item>
-
-<!--        <a-form-item label="集群版本" name="k8sClusterVersion">-->
-<!--          <a-select v-model:value="formState.k8sClusterVersion" placeholder="请选择集群版本">-->
-<!--            <a-select-option value="shanghai">Zone one</a-select-option>-->
-<!--            <a-select-option value="beijing">Zone two</a-select-option>-->
-<!--          </a-select>-->
-<!--        </a-form-item>-->
-
-        <a-form-item label="集群凭证" name="k8sClusterConfig">
-          <a-textarea v-model:value="formState.k8sClusterConfig" placeholder="请粘贴KubeConfig内容"
+        <a-form-item  ref="kubeConfig" label="集群凭证" name="kubeConfig">
+          <a-textarea v-model:value="formState.kubeConfig" placeholder="请粘贴KubeConfig内容"
                       style="width: 100%; height: 300px"/>
         </a-form-item>
 
@@ -81,16 +77,12 @@
       <a-pagination size="md" :show-total="total => `共 ${state.total} 条数据`" :v-model="state.total"
                     :page-size-options="state.pageSizeOptions"
                     :total="state.total"
-                    show-size-changer
+
                     :pageSize="state.pageSize"
                     show-less-items align="right"
                     @showSizeChange="onShowSizeChange"
                     @change="onChange"
       >
-        <template #buildOptionText="props">
-          <span v-if="props.value !== '50'">{{ props.value }}条/页</span>
-          <span v-if="props.value === '50'">全部</span>
-        </template>
       </a-pagination>
     </div>
 
@@ -107,27 +99,27 @@ import router from "../../router";
 const columns = [
   {
     title: '集群名称',
-    dataIndex: 'clusterName',
-    slots: {customRender: 'cluster'},
+    dataIndex: 'name',
+    slots: {customRender: 'name'},
   },
   {
     title: '集群版本',
-    dataIndex: 'clusterVersion',
+    dataIndex: 'version',
     slots: {customRender: 'ClusterVersion'}
   },
   {
-    title: '节点数量',
-    dataIndex: 'nodeNumber',
-    slots: {customRender: 'nodeNumber'}
+    title: '管理节点',
+    dataIndex: 'master',
+    slots: {customRender: 'managerNode'}
   },
   {
     title: '集群凭证',
-    // dataIndex: 'kubeConfig',
+    dataIndex: 'kubeConfig',
     slots: {customRender: 'kubeConfig'},
   },
   {
     title: '创建时间',
-    dataIndex: 'CreatedAt',
+    dataIndex: 'createTime',
   },
   {
     title: '操作',
@@ -152,7 +144,7 @@ export default defineComponent({
       total: 0,
       pageSizeOptions: ['10', '20', '30', '40'],
       ClusterConfigVisible: false,
-      ClusterConfig: undefined,
+      ClusterConfig: "",
     });
 
     const createK8SClusterVisible = ref(false);
@@ -163,12 +155,11 @@ export default defineComponent({
 
     const formRef = ref();
     const formState = reactive({
-      k8sClusterName: undefined,
-      k8sClusterVersion: "",
-      k8sClusterConfig: undefined,
+      name: "",
+      kubeConfig: "",
     });
     const rules = {
-      k8sClusterName: [
+      name: [
         {
           required: true,
           message: '请输入集群名称',
@@ -181,14 +172,7 @@ export default defineComponent({
           trigger: 'blur',
         },
       ],
-      // k8sClusterVersion: [
-      //   {
-      //     required: true,
-      //     message: '请选择集群版本',
-      //     trigger: 'change',
-      //   },
-      // ],
-      k8sClusterConfig: [
+      kubeConfig: [
         {
           required: true,
           message: '请粘贴KubeConfig内容',
@@ -201,24 +185,19 @@ export default defineComponent({
       formRef.value
           .validate()
           .then(() => {
+            console.log(formState.name, formState.kubeConfig, "--------------")
             k8sCluster({
-              "clusterName": formState.k8sClusterName,
-              "kubeConfig": formState.k8sClusterConfig,
-              "clusterVersion": formState.k8sClusterVersion
+              "name": formState.name,
+              "kubeConfig": formState.kubeConfig,
             }).then(res => {
-              if (res.errCode === 0) {
-                message.success(res.msg)
+                message.success("创建成功")
                 createK8SClusterVisible.value = false;
                 resetForm()
                 getK8SCluster()
-              } else {
-                message.error(res.errMsg)
-              }
+            }).catch(err => {
+              message.warning("请检查输入配置是否正确")
             })
           })
-          .catch(error => {
-            return error
-          });
     };
 
     const resetForm = () => {
@@ -228,33 +207,29 @@ export default defineComponent({
     // 获取集群信息
     const getK8SCluster = async (pageSize) => {
       const {data} = await fetchK8SCluster({size: pageSize})
-      state.data = data.data
-      state.total = data.total
+      state.data = data.list
+      state.total = data.totalCount
       state.pageSize = data.pageSize
     }
     // 翻页
     const onChange = async (pageNumber) => {
       fetchK8SCluster({
-        page: pageNumber,
-        size: state.pageSize
+        pageNo: pageNumber,
+        pageSize: state.pageSize
       }).then(res => {
-        if (res.errCode === 0) {
-          state.data = res.data.data
-          state.total = res.data.total
-          state.pageSize = res.data.pageSize
-        }
+          state.data = res.data.list
       });
 
     };
     // 显示条数
     const onShowSizeChange = async (current, pageSize) => {
       const {data} = await fetchK8SCluster({
-        size: pageSize,
+        pageNo: pageSize,
       })
-      state.data = data.data
-      state.total = data.total
+      state.data = data.list
+      state.total = data.totalCount
       state.pageSize = data.pageSize
-      state.current = 1
+      state.current = data.pageNo
     };
 
     const rowSelection = {
@@ -280,22 +255,12 @@ export default defineComponent({
 
     };
     // 查看集群凭证
-    const ViewClusterConfig = (text, id) => {
-      clusterSecret({'clusterId': id}).then(res => {
-        if (res.errCode === 0){
-          state.ClusterConfig = res.data.secret
-          state.ClusterConfigVisible = true
-        }else {
-          message.error("获取集群凭证失败")
-
-        }
-      })
-
-      // state.ClusterConfig = text
-
+    const ViewClusterConfig = (text) => {
+      state.ClusterConfig = text
+      state.ClusterConfigVisible = true
     }
     // 查看集群详情
-    const clusterDetail = (text, id) => {
+    const clusterDetail = (text) => {
       router.push({path: `/k8s/cluster/detail/${id}`})
     }
     onMounted(getK8SCluster)

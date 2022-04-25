@@ -57,6 +57,7 @@ type Cluster struct {
 			  }
 			}
 	*/
+	Version     string     `orm:"null;size(64)" json:"version"`
 	MetaData    string     `orm:"null;type(text)" json:"metaData,omitempty"`
 	Master      string     `orm:"size(128)" json:"master,omitempty"` // apiserver地址，示例： https://10.172.189.140
 	KubeConfig  string     `orm:"null;type(text)" json:"kubeConfig,omitempty"`
