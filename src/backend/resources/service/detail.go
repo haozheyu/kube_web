@@ -65,7 +65,7 @@ func GetServiceDetail(cli *kubernetes.Clientset, indexer *client.CacheFactory, n
 		return nil, err
 	}
 
-	eventList, err := event.GetPodsWarningEvents(indexer, podList)
+	eventList, err := event.GetPodsEvents(indexer, podList)
 	if err != nil {
 		return nil, err
 	}

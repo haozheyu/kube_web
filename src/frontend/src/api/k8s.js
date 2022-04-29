@@ -2,14 +2,20 @@ import {post, get, del} from "@/plugin/utils/request";
 
 export const k8sCluster = (params) => post('/api/v1/clusters', params)  //create cluster
 export const fetchK8SCluster = (params) => get('/api/v1/clusters', params)  // get cluster list
+export const getK8SClusterDetail = (uri, params) => get("/api/v1/kubernetes/nodes/clusters/"+uri, params)
+export const getEvents = (name) => get('/api/v1/kubernetes/apps/events/namespaces/clusters/event?cluster=' + name)
+export const NodeDetail = (params) => get('/api/v1/kubernetes/nodes/clusters/'+ params)
+
+
+export const getNodes = () => get('/api/v1/clusters/names')
 
 
 export const clusterSecret = (params) => get('/api/v1/k8s/cluster/secret', params)
 export const delK8SCluster = (params) => post('/api/v1/k8s/cluster/delete', params)
-export const getK8SClusterDetail = (params) => get('/api/v1/k8s/cluster/detail', params)
-export const getEvents = (params) => get('/api/v1/k8s/events', params)
-export const getNodes = (params) => get('/api/v1/k8s/node', params)
-export const NodeDetail = (params) => get('/api/v1/k8s/node/detail', params)
+
+
+
+
 export const NodeSchedule = (params, clusterId) => post('/api/v1/k8s/node/schedule?clusterId=' + clusterId, params)
 export const NodeCordon = (params, clusterId) => get('/api/v1/k8s/node/cordon?clusterId=' + clusterId, params)
 export const RemoveNode = (params, clusterId) => del('/api/v1/k8s/node?clusterId=' + clusterId, params)

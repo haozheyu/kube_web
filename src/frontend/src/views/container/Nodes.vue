@@ -8,41 +8,11 @@
           @change="handleChange"
           placeholder="请选择集群"
       >
-        <a-select-option v-for="clusters in cluster.data" :key="clusters.id" :label="clusters.clusterName">
-          {{ clusters.clusterName }}
+        <a-select-option v-for="clusters in cluster.data" :key="clusters.id" :label="clusters.name">
+          {{ clusters.name }}
         </a-select-option>
       </a-select>
 
-      <a-input-search
-          v-model:value="value"
-          placeholder="根据名称过滤"
-          style="width: 200px"
-          @search="onSearch"
-      />
-
-<!--      &lt;!&ndash;标签过滤开始&ndash;&gt;-->
-<!--      <a-dropdown-button>-->
-<!--        标签过滤-->
-<!--        <a-menu @click="FilterLabelMenuClick">-->
-<!--          <a-menu-item v-for="(labelKey, labelValue) in cluster.data.objectMeta.labels" :key="labelValue + '=' + labelKey">-->
-<!--            {{ labelValue }}={{ labelKey }}-->
-<!--          </a-menu-item>-->
-<!--        </a-menu>-->
-<!--      </a-dropdown-button>-->
-
-<!--      &lt;!&ndash;当标签被选中时页面显示tags&ndash;&gt;-->
-<!--      <template>-->
-<!--        <div>-->
-<!--          <template v-for="(tag) in tags" :key="tag">-->
-<!--            <a-tag :closable="true" @close="() => removeTagClose(tag)" style="background: #fff; border-style: dashed;">-->
-<!--              {{ tag }}-->
-<!--            </a-tag>-->
-<!--          </template>-->
-<!--          <a v-if="tags.length!==0" @click="removeAllTags()">清除标签</a>-->
-<!--        </div>-->
-
-<!--      </template>-->
-<!--      &lt;!&ndash;标签过滤结束&ndash;&gt;-->
     </a-space>
     <a-button style="float:right;z-index:99;margin-bottom: 10px" gutter={40} type="flex" justify="space-between" align="bottom" @click="getNode()">
       <template #icon>
@@ -303,9 +273,8 @@ import {computed, reactive, ref, inject, onMounted, h, toRefs} from 'vue';
 import {
   CollectionCordonNode,
   CollectionNodeSchedule,
-  fetchK8SCluster,
   getNodes,
-  NodeCordon,
+  NodeCordon, NodeDetail,
   NodeSchedule,
   RemoveNode
 } from '../../api/k8s'
@@ -315,16 +284,17 @@ import { Modal } from 'ant-design-vue';
 const columns = [
   {
     title: '名称/IP',
-    // dataIndex: 'objectMeta.name',
+    dataIndex: 'name',
     slots: {customRender: 'name'},
   },
   {
     title: '状态',
-    slots: {customRender: 'ready'},
+    dataIndex: 'spec.ready',
+    slots: {customRender: 'status'},
   },
   {
     title: '角色',
-    dataIndex: 'typeMeta.kind',
+    dataIndex: 'labels.kubernetes.io/role',
   },
   {
     // title: '容器组（已分配量/总额度）',
@@ -359,45 +329,19 @@ export default {
   name: "Nodes",
   setup() {
     const handleChange = (key, value) => {
-      // if (cluster.clusterId === "" || cluster.clusterId === undefined || cluster.clusterId === null) {
+      if (cluster.clusterId === "" || cluster.clusterId === undefined || cluster.clusterId === null) {
       localStorage.setItem("cluster", JSON.stringify({"clusterId": value.value, "clusterName": value.label}))
       data.selectedRows = []
       data.unscheduleData = []
       state.selectedRowKeys = []
-      // }
-      getNode()
+      }
+      getNode(value.label)
     };
     const focus = () => {
       console.log('focus');
     };
 
     const value = ref('');
-    // 节点搜索
-    const onSearch = searchValue => {
-
-      if (cluster.clusterName === undefined ){
-          message.warning("你未选择集群")
-          return;
-      }
-      if (cluster.clusterName !== undefined && searchValue === "") {
-        message.warning("请输入搜索内容")
-        return;
-      }
-      let cs = GetStorage()
-      if (cs) {
-        cs = cluster.clusterId
-        page.loading = true
-        getNodes({'clusterId': cs, 'itemsPerPage': page.pageSize, 'page': page.current, 'filterBy': 'name,' + searchValue}).then(res => {
-          if (res.errCode === 0) {
-            cluster.nodeData = res.data.nodes
-            page.total = res.data.listMeta.totalItems
-            page.loading = false
-          }else {
-            message.error("获取节点异常！")
-          }
-        })
-      }
-    };
 
     const cluster = reactive({
       clusterName: undefined,
@@ -448,8 +392,9 @@ export default {
     };
     // 查看集群
     const getK8SCluster = async () => {
-      const {data} = await fetchK8SCluster()
-      cluster.data = data.data
+      getNodes().then(res => {
+        cluster.data = res.data
+      })
     }
     const message = inject('$message');
     const GetStorage = () => {
@@ -460,25 +405,17 @@ export default {
         return cluster
       }
     }
-    const getNode = () => {
-      let cs = GetStorage()
-      if (cs) {
-        cs = cluster.clusterId
-        page.loading = true
-        getNodes({'clusterId': cs, 'itemsPerPage': page.pageSize, 'page': page.current}).then(res => {
-          if (res.errCode === 0) {
-            cluster.nodeData = res.data.nodes
-            page.total = res.data.listMeta.totalItems
-            page.loading = false
-          }else {
-            message.error("获取节点异常！")
-          }
-        })
-      }
+    const getNode = (clustername) => {
+      page.loading = true
+      NodeDetail(clustername).then(res => {
+        console.log(res)
+        cluster.nodeData = res.data.nodes
+        page.total = res.data.nodes.len
+        page.loading = false
+      })
     }
-    const nodeDetail = (name) => {
-      let cs = GetStorage()
-      let routeData = router.resolve({ name: 'NodeDetail', query: {name: name, clusterId: cs.clusterId} });
+    const nodeDetail = (clusterName) => {
+      let routeData = router.resolve({ name: 'NodeDetail', query: {name: clusterName} });
       window.open(routeData.href, '_blank');
     }
     // const filterLabel = (e) => {
@@ -639,7 +576,6 @@ export default {
     onMounted(() => {
       GetStorage();
       getK8SCluster();
-      getNode();
     });
 
 
@@ -649,8 +585,6 @@ export default {
       cluster,
       getNode,
       value,
-      onSearch,
-
       columns,
       hasSelected,
       ...toRefs(state),

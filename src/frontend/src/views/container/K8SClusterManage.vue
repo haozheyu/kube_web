@@ -261,7 +261,7 @@ export default defineComponent({
     }
     // 查看集群详情
     const clusterDetail = (text) => {
-      router.push({path: `/k8s/cluster/detail/${id}`})
+      router.push({path: `/k8s/cluster/detail/${text.name}`})
     }
     onMounted(getK8SCluster)
 

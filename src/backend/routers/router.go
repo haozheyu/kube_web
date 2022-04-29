@@ -238,76 +238,76 @@ func init() {
 	)
 
 	nsWithKubernetesApp := beego.NewNamespace("/api/v1",
-		beego.NSNamespace("/kubernetes/apps/:appid([0-9]+)/cronjobs",
+		beego.NSNamespace("/kubernetes/apps/cronjobs",
 			beego.NSInclude(
 				&kcronjob.KubeCronjobController{},
 			),
 		),
-		beego.NSNamespace("/kubernetes/apps/:appid([0-9]+)/deployments",
+		beego.NSNamespace("/kubernetes/apps/deployments",
 			beego.NSInclude(
 				&kdeployment.KubeDeploymentController{},
 			),
 		),
-		beego.NSNamespace("/kubernetes/apps/:appid([0-9]+)/statefulsets",
+		beego.NSNamespace("/kubernetes/apps/statefulsets",
 			beego.NSInclude(
 				&kstatefulset.KubeStatefulsetController{},
 			),
 		),
-		beego.NSNamespace("/kubernetes/apps/:appid([0-9]+)/daemonsets",
+		beego.NSNamespace("/kubernetes/apps/daemonsets",
 			beego.NSInclude(
 				&kdaemonset.KubeDaemonSetController{},
 			),
 		),
-		beego.NSNamespace("/kubernetes/apps/:appid([0-9]+)/configmaps",
+		beego.NSNamespace("/kubernetes/apps/configmaps",
 			beego.NSInclude(
 				&kconfigmap.KubeConfigMapController{},
 			),
 		),
-		beego.NSNamespace("/kubernetes/apps/:appid([0-9]+)/services",
+		beego.NSNamespace("/kubernetes/apps/services",
 			beego.NSInclude(
 				&kservice.KubeServiceController{},
 			),
 		),
-		beego.NSNamespace("/kubernetes/apps/:appid([0-9]+)/ingresses",
+		beego.NSNamespace("/kubernetes/apps/ingresses",
 			beego.NSInclude(
 				&kingress.KubeIngressController{},
 			),
 		),
-		beego.NSNamespace("/kubernetes/apps/:appid([0-9]+)/hpas",
+		beego.NSNamespace("/kubernetes/apps/hpas",
 			beego.NSInclude(
 				&khpa.KubeHPAController{},
 			),
 		),
-		beego.NSNamespace("/kubernetes/apps/:appid([0-9]+)/secrets",
+		beego.NSNamespace("/kubernetes/apps/secrets",
 			beego.NSInclude(
 				&ksecret.KubeSecretController{},
 			),
 		),
-		beego.NSNamespace("/kubernetes/apps/:appid([0-9]+)/persistentvolumeclaims",
+		beego.NSNamespace("/kubernetes/apps/persistentvolumeclaims",
 			beego.NSInclude(
 				&kpvc.KubePersistentVolumeClaimController{},
 			),
 		),
-		beego.NSNamespace("/kubernetes/apps/:appid([0-9]+)/persistentvolumeclaims/robin",
+		beego.NSNamespace("/kubernetes/apps/persistentvolumeclaims/robin",
 			beego.NSInclude(
 				&kpvc.RobinPersistentVolumeClaimController{},
 			),
 		),
 
-		beego.NSNamespace("/kubernetes/apps/:appid([0-9]+)/jobs",
+		beego.NSNamespace("/kubernetes/apps/jobs",
 			beego.NSInclude(
 				&kjob.KubeJobController{},
 			),
 		),
-		beego.NSNamespace("/kubernetes/apps/:appid([0-9]+)/pods",
+		beego.NSNamespace("/kubernetes/apps/pods",
 			beego.NSInclude(
 				&kpod.KubePodController{}),
 		),
-		beego.NSNamespace("/kubernetes/apps/:appid([0-9]+)/events",
+		beego.NSNamespace("/kubernetes/apps/events",
 			beego.NSInclude(
 				&kevent.KubeEventController{}),
 		),
-		beego.NSNamespace("/kubernetes/apps/:appid([0-9]+)/podlogs",
+		beego.NSNamespace("/kubernetes/apps/podlogs",
 			beego.NSInclude(
 				&klog.KubeLogController{}),
 		),
@@ -315,32 +315,32 @@ func init() {
 
 	nsWithNamespace := beego.NewNamespace("/api/v1",
 		// 路由中携带namespaceid
-		beego.NSNamespace("/namespaces/:namespaceid([0-9]+)/apps",
+		beego.NSNamespace("/namespaces/apps",
 			beego.NSInclude(
 				&app.AppController{},
 			),
 		),
-		beego.NSNamespace("/namespaces/:namespaceid([0-9]+)/webhooks",
+		beego.NSNamespace("/namespaces/webhooks",
 			beego.NSInclude(
 				&webhook.WebHookController{},
 			),
 		),
-		beego.NSNamespace("/namespaces/:namespaceid([0-9]+)/apikeys",
+		beego.NSNamespace("/namespaces/apikeys",
 			beego.NSInclude(
 				&apikey.ApiKeyController{},
 			),
 		),
-		beego.NSNamespace("/namespaces/:namespaceid([0-9]+)/users",
+		beego.NSNamespace("/namespaces/users",
 			beego.NSInclude(
 				&permission.NamespaceUserController{},
 			),
 		),
-		beego.NSNamespace("/namespaces/:namespaceid([0-9]+)/bills",
+		beego.NSNamespace("/namespaces/bills",
 			beego.NSInclude(
 				&bill.BillController{},
 			),
 		),
-		beego.NSNamespace("/namespaces/:namespaceid([0-9]+)/customlink",
+		beego.NSNamespace("/namespaces/customlink",
 			beego.NSInclude(
 				&customlink.ShowLinkController{},
 			),
@@ -431,27 +431,27 @@ func init() {
 	// For Kubernetes resource router
 	// appid used to check permission
 	nsWithKubernetesProxy := beego.NewNamespace("/api/v1",
-		beego.NSNamespace("/apps/:appid([0-9]+)/_proxy/clusters/:cluster/namespaces/:namespace/:kind",
+		beego.NSNamespace("/apps/_proxy/clusters/:cluster/namespaces/:namespace/:kind",
 			beego.NSInclude(
 				&proxy.KubeProxyController{},
 			),
 		),
-		beego.NSNamespace("/apps/:appid([0-9]+)/_proxy/clusters/:cluster/customresourcedefinitions",
+		beego.NSNamespace("/apps/_proxy/clusters/:cluster/customresourcedefinitions",
 			beego.NSInclude(
 				&kcrd.KubeCRDController{},
 			),
 		),
-		beego.NSNamespace("/apps/:appid([0-9]+)/_proxy/clusters/:cluster/apis/:group/:version/namespaces/:namespace/:kind",
+		beego.NSNamespace("/apps/_proxy/clusters/:cluster/apis/:group/:version/namespaces/:namespace/:kind",
 			beego.NSInclude(
 				&kcrd.KubeCustomCRDController{},
 			),
 		),
-		beego.NSNamespace("/apps/:appid([0-9]+)/_proxy/clusters/:cluster/apis/:group/:version/:kind",
+		beego.NSNamespace("/apps/_proxy/clusters/:cluster/apis/:group/:version/:kind",
 			beego.NSInclude(
 				&kcrd.KubeCustomCRDController{},
 			),
 		),
-		beego.NSNamespace("/apps/:appid([0-9]+)/_proxy/clusters/:cluster/:kind",
+		beego.NSNamespace("/apps/_proxy/clusters/:cluster/:kind",
 			beego.NSInclude(
 				&proxy.KubeProxyController{},
 			),

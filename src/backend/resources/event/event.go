@@ -5,7 +5,6 @@ import (
 	"sort"
 	"strings"
 
-	batchv1 "k8s.io/api/batch/v1"
 	apiv1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
@@ -15,7 +14,6 @@ import (
 	basecommon "kube_web/common"
 	"kube_web/resources/common"
 	"kube_web/resources/dataselector"
-	"kube_web/util/slice"
 )
 
 // FailedReasonPartials  is an array of partial strings to correctly filter warning events.
@@ -27,18 +25,13 @@ import (
 var FailedReasonPartials = []string{"failed", "err", "exceeded", "invalid", "unhealthy",
 	"mismatch", "insufficient", "conflict", "outof", "nil", "backoff"}
 
-func GetPodsWarningEvents(indexer *client.CacheFactory, pods []*apiv1.Pod) ([]common.Event, error) {
+func GetPodsEvents(indexer *client.CacheFactory, pods []*apiv1.Pod) ([]common.Event, error) {
 	events, err := indexer.EventLister().List(labels.Everything())
 	if err != nil {
 		return nil, err
 	}
-
 	result := make([]common.Event, 0)
-
-	// Filter out only warning events
-	events = getWarningEvents(events)
 	failedPods := make([]*apiv1.Pod, 0)
-
 	// Filter out ready and successful pods
 	for _, pod := range pods {
 		if !isReadyOrSucceeded(pod) {
@@ -66,7 +59,42 @@ func GetPodsWarningEvents(indexer *client.CacheFactory, pods []*apiv1.Pod) ([]co
 	return result, nil
 }
 
-func getPodsWarningEventsPage(kubeClient client.ResourceHandler, pods []*apiv1.Pod) ([]common.Event, error) {
+func GetPodsEventPage(kubeClient client.ResourceHandler, namespace string, q *basecommon.QueryParam) (*basecommon.Page, error) {
+	var (
+		events []common.Event
+		err    error
+	)
+	if namespace == "ALL" {
+		namespace = ""
+	}
+
+	pods, err := kubeClient.List(api.ResourceNamePod, namespace, labels.Everything().String())
+	if err != nil {
+		return nil, err
+	}
+
+	relatePod := make([]*apiv1.Pod, 0)
+	for _, obj := range pods {
+		pod, ok := obj.(*apiv1.Pod)
+		if !ok {
+			return nil, fmt.Errorf("Convert pod obj (%v) error. ", obj)
+		}
+
+		for _ = range pod.OwnerReferences {
+			relatePod = append(relatePod, pod)
+		}
+	}
+
+	events, err = getPodsEventsPage(kubeClient, relatePod)
+	if err != nil {
+		return nil, err
+	}
+
+	return pageResult(events, q), nil
+}
+
+// kubectl get events
+func getPodsEventsPage(kubeClient client.ResourceHandler, pods []*apiv1.Pod) ([]common.Event, error) {
 	eventObjs, err := kubeClient.List(api.ResourceNameEvent, "", labels.Everything().String())
 	if err != nil {
 		return nil, err
@@ -79,20 +107,18 @@ func getPodsWarningEventsPage(kubeClient client.ResourceHandler, pods []*apiv1.P
 
 	result := make([]common.Event, 0)
 
-	// Filter out only warning events
-	events = getWarningEvents(events)
 	failedPods := make([]*apiv1.Pod, 0)
 
 	// Filter out ready and successful pods
 	for _, pod := range pods {
-		if !isReadyOrSucceeded(pod) {
-			failedPods = append(failedPods, pod)
-		}
+		// if !isReadyOrSucceeded(pod) {
+		failedPods = append(failedPods, pod)
+		//}
 	}
 
 	// Filter events by failed pods UID
-	events = filterEventsByPodsUID(events, failedPods)
-	events = removeDuplicates(events)
+	// events = filterEventsByPodsUID(events, failedPods)
+	// events = removeDuplicates(events)
 
 	for _, event := range events {
 		result = append(result, common.Event{
@@ -108,50 +134,6 @@ func getPodsWarningEventsPage(kubeClient client.ResourceHandler, pods []*apiv1.P
 	}
 
 	return result, nil
-}
-
-func GetPodsEventByCronJobPage(kubeClient client.ResourceHandler, namespace, name string, q *basecommon.QueryParam) (*basecommon.Page, error) {
-	jobs, err := kubeClient.List(api.ResourceNameJob, namespace, labels.Everything().String())
-	if err != nil {
-		return nil, err
-	}
-	relateJobs := make([]string, 0)
-	for _, obj := range jobs {
-		job, ok := obj.(*batchv1.Job)
-		if !ok {
-			return nil, fmt.Errorf("Convert rs obj (%v) error. ", obj)
-		}
-		for _, ref := range job.OwnerReferences {
-			if ref.Kind == api.KindNameCronJob && ref.Name == name {
-				relateJobs = append(relateJobs, job.Name)
-			}
-		}
-
-	}
-	pods, err := kubeClient.List(api.ResourceNamePod, namespace, labels.Everything().String())
-	if err != nil {
-		return nil, err
-	}
-	relatePod := make([]*apiv1.Pod, 0)
-	for _, obj := range pods {
-		pod, ok := obj.(*apiv1.Pod)
-		if !ok {
-			return nil, fmt.Errorf("Convert pod obj (%v) error. ", obj)
-		}
-		for _, ref := range pod.OwnerReferences {
-			if ref.Kind == api.KindNameJob && slice.StrSliceContains(relateJobs, ref.Name) {
-				relatePod = append(relatePod, pod)
-			}
-		}
-
-	}
-
-	events, err := getPodsWarningEventsPage(kubeClient, relatePod)
-	if err != nil {
-		return nil, err
-	}
-
-	return pageResult(events, q), nil
 }
 
 func pageResult(events []common.Event, q *basecommon.QueryParam) *basecommon.Page {
@@ -174,7 +156,6 @@ func getWarningEvents(events []*apiv1.Event) []*apiv1.Event {
 	if !IsTypeFilled(events) {
 		events = FillEventsType(events)
 	}
-
 	return filterEventsByType(events, apiv1.EventTypeWarning)
 }
 

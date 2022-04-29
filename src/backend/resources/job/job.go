@@ -94,7 +94,7 @@ func GetPodsEvent(cli *kubernetes.Clientset, indexer *client.CacheFactory, names
 	// 目前写死为1
 	podInfo.Desired = 1
 
-	podInfo.Warnings, err = event.GetPodsWarningEvents(indexer, pods)
+	podInfo.Warnings, err = event.GetPodsEvents(indexer, pods)
 	if err != nil {
 		return resourcescommon.PodInfo{}, err
 	}

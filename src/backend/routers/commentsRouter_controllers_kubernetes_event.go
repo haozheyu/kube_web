@@ -11,7 +11,7 @@ func init() {
 		beego.GlobalControllerRouter[KubeEventController],
 		beego.ControllerComments{
 			Method:           "List",
-			Router:           `/namespaces/:namespace/clusters/:cluster`,
+			Router:           `/namespaces/clusters/event`,
 			AllowHTTPMethods: []string{"get"},
 			MethodParams:     param.Make(),
 			Filters:          nil,

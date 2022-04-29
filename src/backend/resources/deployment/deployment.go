@@ -142,7 +142,7 @@ func toDeployment(deployment *appsv1.Deployment, indexer *client.CacheFactory) (
 		return nil, err
 	}
 
-	podInfo.Warnings, err = event.GetPodsWarningEvents(indexer, pods)
+	podInfo.Warnings, err = event.GetPodsEvents(indexer, pods)
 	if err != nil {
 		return nil, err
 	}

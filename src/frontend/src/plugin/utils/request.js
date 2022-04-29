@@ -62,7 +62,7 @@ const errorHandle = (status) => {
             message.error('请求的资源不存在!')
             break;
         case 400:
-            toLogin();
+            message.error('后端接口异常!')
             break;
         case 429:
             message.warning("当前访问太过频繁,请稍等再试!")
